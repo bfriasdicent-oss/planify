@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Charro - Blaury Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #050505;
+            --accent-nexus: #00f2ea; /* Basado en tu calculadora Nexus */
+            --accent-planify: #ff0050; /* Basado en tu agenda Planify */
+            --text: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Space Grotesk', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 450px;
+            text-align: center;
+            animation: fadeIn 1s ease-out;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            background: linear-gradient(to right, var(--accent-nexus), var(--accent-planify));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .speech {
+            font-size: 1rem;
+            opacity: 0.8;
+            margin-bottom: 35px;
+            line-height: 1.6;
+        }
+
+        .links-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 15px;
+            text-decoration: none;
+            color: white;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            backdrop-filter: blur(10px);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .card.nexus:hover { border-color: var(--accent-nexus); box-shadow: 0 10px 20px rgba(0, 242, 234, 0.15); }
+        .card.planify:hover { border-color: var(--accent-planify); box-shadow: 0 10px 20px rgba(255, 0, 80, 0.15); }
+
+        .card h2 { font-size: 1.4rem; margin-bottom: 8px; }
+        .card.nexus h2 { color: var(--accent-nexus); }
+        .card.planify h2 { color: var(--accent-alt); } /* Mantiene el estilo solicitado */
+        
+        .footer {
+            margin-top: 50px;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .footer span { color: #ff0050; font-weight: bold; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Mi Ecosistema</h1>
+        <p class="speech">
+            "Gracias por estar aquí. Nexus y Planify son solo el comienzo de lo que estamos construyendo. ¡Dale con todo!"
+        </p>
+
+        <div class="links-grid">
+            <!-- Link a Planify -->
+            <a href="https://bfriasdicent-oss.github.io/planify/" class="card planify">
+                <h2>Planify</h2>
+                <p>Tu agenda o web que te ayuda a planificar tareas con estilo.</p>
+            </a>
+
+            <!-- Link a Nexus -->
+            <a href="https://bfriasdicent-oss.github.io/nexus/" class="card nexus">
+                <h2>Nexus</h2>
+                <p>Una calculadora promedio inteligente diseñada para la eficiencia.</p>
+            </a>
+        </div>
+
+        <div class="footer">
+            Creado por <span>charro - Blaury</span>
+        </div>
+    </div>
+
+</body>
+</html>
