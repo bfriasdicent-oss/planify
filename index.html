@@ -4,14 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Planify — Organiza tu vida escolar</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%236c63ff'/><rect x='20' y='28' width='60' height='52' rx='8' fill='white'/><rect x='20' y='28' width='60' height='20' rx='8' fill='%23312e81'/><rect x='33' y='18' width='8' height='18' rx='4' fill='white'/><rect x='59' y='18' width='8' height='18' rx='4' fill='white'/><rect x='29' y='57' width='12' height='12' rx='3' fill='%236c63ff'/><rect x='45' y='57' width='12' height='12' rx='3' fill='%236c63ff'/><rect x='61' y='57' width='12' height='12' rx='3' fill='%236c63ff'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700;9..40,800&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 42 42'><defs><linearGradient id='bg' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%236c63ff'/><stop offset='100%25' stop-color='%23a78bfa'/></linearGradient></defs><rect width='42' height='42' rx='12' fill='url(%23bg)'/><circle cx='21' cy='21' r='7' fill='none' stroke='rgba(255,255,255,0.85)' stroke-width='1.5'/><path d='M21 14 A7 7 0 0 1 28 21' fill='none' stroke='%23ff6584' stroke-width='2.5' stroke-linecap='round'/><circle cx='21' cy='21' r='2' fill='white'/><line x1='21' y1='21' x2='21' y2='15.5' stroke='white' stroke-width='1.5' stroke-linecap='round'/><line x1='21' y1='21' x2='25' y2='23' stroke='white' stroke-width='1.2' stroke-linecap='round'/><circle cx='21' cy='8' r='2.2' fill='%23ff6584'/></svg>">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#6c63ff">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Planify">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#07080f;--s1:#0d0f1e;--s2:#12152a;--accent:#6c63ff;--accent2:#ff6584;--accent3:#43e97b;--accent4:#f7971e;--text:#f0f0ff;--muted:#7b7fa8;--border:rgba(108,99,255,.15);--r:14px;--font:system-ui,-apple-system,'Segoe UI',sans-serif}
+:root{--bg:#07080f;--s1:#0d0f1e;--s2:#12152a;--accent:#6c63ff;--accent2:#ff6584;--accent3:#43e97b;--accent4:#f7971e;--text:#f0f0ff;--muted:#7b7fa8;--border:rgba(108,99,255,.15);--r:14px;--font:'DM Sans',system-ui,sans-serif}
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;overflow-x:hidden}
 .mesh{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
@@ -20,11 +22,20 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 .b2{width:500px;height:500px;background:var(--accent2);bottom:-150px;left:-100px;--d:18s;--delay:3s}
 .b3{width:400px;height:400px;background:var(--accent3);top:40%;left:30%;--d:20s;--delay:7s}
 @keyframes blobFloat{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-30px) scale(1.05)}66%{transform:translate(-20px,20px) scale(.95)}}
-header{position:sticky;top:0;z-index:100;padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(7,8,15,.85);backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
-.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.25rem;letter-spacing:-.02em}
-.logo-mark{width:32px;height:32px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:.9rem}
-.logo-text{background:linear-gradient(135deg,#fff,rgba(255,255,255,.7));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.date-pill{background:var(--s1);border:1px solid var(--border);border-radius:20px;padding:.3rem .9rem;font-size:.8rem;color:var(--muted);font-weight:500}
+
+@keyframes orbitSpin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+@keyframes pulsering{0%,100%{opacity:.15}50%{opacity:.4}}
+@keyframes facePulse{0%,100%{opacity:.85}50%{opacity:.5}}
+@keyframes arcDash{0%{stroke-dashoffset:0}100%{stroke-dashoffset:-22}}
+.logo-orbit{transform-origin:21px 21px;animation:orbitSpin 4s linear infinite}
+.logo-ring{animation:pulsering 3s ease-in-out infinite}
+.logo-face{animation:facePulse 2.5s ease-in-out infinite}
+.logo-arc{stroke-dasharray:5 3;animation:arcDash 1.5s linear infinite}
+
+header{position:sticky;top:0;z-index:100;padding:0 2rem;height:64px;display:flex;align-items:center;background:rgba(7,8,15,.85);backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
+.logo{display:flex;align-items:center;gap:12px;text-decoration:none}
+.logo-text{font-size:1.3rem;font-weight:800;letter-spacing:-.03em;background:linear-gradient(135deg,#fff,rgba(255,255,255,.7));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
 main{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:3rem 1.5rem 5rem}
 .hero{padding:2rem 0 2rem;animation:fadeUp .7s ease both}
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
@@ -146,8 +157,11 @@ select option{background:var(--s2)}
 .ach-pop-text span{font-size:.78rem;color:var(--muted)}
 .toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--s2);border:1px solid var(--border);border-radius:12px;padding:.75rem 1.1rem;font-size:.85rem;font-weight:600;z-index:998;transform:translateY(80px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);box-shadow:0 8px 32px rgba(0,0,0,.4)}
 .toast.show{transform:translateY(0);opacity:1}
-.install-btn{display:none;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:10px;padding:.5rem 1rem;color:#fff;font-family:var(--font);font-weight:700;font-size:.8rem;cursor:pointer;transition:transform .15s}
-.install-btn:hover{transform:translateY(-2px)}
+footer{position:relative;z-index:1;text-align:center;padding:2rem 1.5rem 2.5rem;border-top:1px solid var(--border)}
+.footer-inner{display:inline-flex;align-items:center;gap:.5rem;font-size:.78rem;color:var(--muted)}
+.footer-inner a{color:var(--muted);text-decoration:none;font-weight:600;transition:color .2s}
+.footer-inner a:hover{color:var(--text)}
+.footer-dot{width:3px;height:3px;background:var(--muted);border-radius:50%;opacity:.5}
 @media(max-width:640px){.top-row{grid-template-columns:1fr}.stats-row{grid-template-columns:repeat(2,1fr)}.form-grid{grid-template-columns:1fr}header{padding:0 1rem}main{padding:2rem 1rem 4rem}.nexus-banner{flex-direction:column;text-align:center}.achievements-grid{grid-template-columns:repeat(3,1fr)}}
 </style>
 </head>
@@ -158,13 +172,35 @@ select option{background:var(--s2)}
   <div class="ach-pop-icon" id="ach-pop-icon">🏆</div>
   <div class="ach-pop-text"><strong id="ach-pop-name">Logro desbloqueado</strong><span id="ach-pop-desc"></span></div>
 </div>
+
 <header>
-  <div class="logo"><div class="logo-mark">📅</div><span class="logo-text">Planify</span></div>
-  <div style="display:flex;align-items:center;gap:.5rem">
-    <button class="install-btn" id="install-btn">⬇️ Instalar app</button>
-    <div class="date-pill" id="date-pill"></div>
-  </div>
+  <a class="logo" href="#">
+    <svg width="38" height="38" viewBox="0 0 42 42" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="logoBg" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#6c63ff"/>
+          <stop offset="100%" stop-color="#a78bfa"/>
+        </linearGradient>
+        <linearGradient id="logoArc" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#ff6584"/>
+          <stop offset="100%" stop-color="#f7971e"/>
+        </linearGradient>
+      </defs>
+      <rect width="42" height="42" rx="12" fill="url(#logoBg)"/>
+      <circle cx="21" cy="21" r="13" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1" class="logo-ring"/>
+      <circle cx="21" cy="21" r="7" fill="none" stroke="rgba(255,255,255,0.85)" stroke-width="1.5" class="logo-face"/>
+      <path d="M21 14 A7 7 0 0 1 28 21" fill="none" stroke="url(#logoArc)" stroke-width="2.5" stroke-linecap="round" class="logo-arc"/>
+      <circle cx="21" cy="21" r="2" fill="white"/>
+      <line x1="21" y1="21" x2="21" y2="15.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="21" y1="21" x2="25" y2="23" stroke="white" stroke-width="1.2" stroke-linecap="round"/>
+      <g class="logo-orbit">
+        <circle cx="21" cy="8" r="2.2" fill="#ff6584"/>
+      </g>
+    </svg>
+    <span class="logo-text">Planify</span>
+  </a>
 </header>
+
 <main>
   <div class="hero">
     <div class="hero-eyebrow">Agenda escolar inteligente</div>
@@ -227,9 +263,18 @@ select option{background:var(--s2)}
     <a href="https://bfriasdicent-oss.github.io/nexus/" target="_blank" class="banner-btn">Ir a Nexus →</a>
   </div>
 </main>
+
+<footer>
+  <div class="footer-inner">
+    <span>Hecho con ♥ por</span>
+    <a href="#" target="_blank">Charro Labs</a>
+    <span class="footer-dot"></span>
+    <span>© 2025</span>
+  </div>
+</footer>
+
 <script>
 const sNames={mat:'Matemáticas',esp:'Español',cien:'Ciencias',hist:'Historia',ing:'Inglés',arte:'Arte',edu:'Ed. Física',otro:'Otra'};
-
 const ACHIEVEMENTS=[
   {id:'first',cat:'general',icon:'🌱',name:'Primer paso',desc:'Agrega tu primera tarea',check:s=>s.total>=1},
   {id:'five',cat:'general',icon:'✋',name:'En marcha',desc:'Agrega 5 tareas',check:s=>s.total>=5},
@@ -267,31 +312,11 @@ const ACHIEVEMENTS=[
   {id:'ing10',cat:'ing',icon:'🌐',name:'Fluent',desc:'Completa 10 de Inglés',check:s=>s.bySubj.ing>=10},
 ];
 
-// Migrar datos viejos si existen
 const oldTasks=localStorage.getItem('agenda_tasks');
-if(oldTasks&&!localStorage.getItem('planify_tasks')){
-  localStorage.setItem('planify_tasks',oldTasks);
-}
-
+if(oldTasks&&!localStorage.getItem('planify_tasks')){localStorage.setItem('planify_tasks',oldTasks)}
 let tasks=JSON.parse(localStorage.getItem('planify_tasks')||'[]');
 let unlocked=JSON.parse(localStorage.getItem('planify_unlocked')||'[]');
-let cf='all';
-let achTab='all';
-let deferredPrompt=null;
-
-// PWA install
-window.addEventListener('beforeinstallprompt',e=>{
-  e.preventDefault();
-  deferredPrompt=e;
-  document.getElementById('install-btn').style.display='block';
-});
-document.getElementById('install-btn').addEventListener('click',async()=>{
-  if(!deferredPrompt)return;
-  deferredPrompt.prompt();
-  await deferredPrompt.userChoice;
-  deferredPrompt=null;
-  document.getElementById('install-btn').style.display='none';
-});
+let cf='all',achTab='all';
 
 function getStreak(){
   const today=new Date().toDateString();
@@ -313,11 +338,7 @@ function getStats(){
 }
 
 function initDate(){
-  const d=new Date();
-  const D=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
-  const M=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
-  document.getElementById('date-pill').textContent=`${D[d.getDay()]} ${d.getDate()} ${M[d.getMonth()]}`;
-  document.getElementById('f-date').value=d.toISOString().split('T')[0];
+  document.getElementById('f-date').value=new Date().toISOString().split('T')[0];
   document.getElementById('streak-num').textContent=getStreak();
 }
 
@@ -333,23 +354,11 @@ function getDue(ds){
   return{l:due.toLocaleDateString('es',{day:'numeric',month:'short'}),c:'due-later'};
 }
 
-function setAchTab(tab,btn){
-  achTab=tab;
-  document.querySelectorAll('.ach-tab').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  renderAchievements();
-}
+function setAchTab(tab,btn){achTab=tab;document.querySelectorAll('.ach-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderAchievements()}
 
 function checkAchievements(){
-  const stats=getStats();
-  let newUnlock=false;
-  ACHIEVEMENTS.forEach(a=>{
-    if(!unlocked.includes(a.id)&&a.check(stats)){
-      unlocked.push(a.id);
-      newUnlock=true;
-      showAchievementPopup(a);
-    }
-  });
+  const stats=getStats();let newUnlock=false;
+  ACHIEVEMENTS.forEach(a=>{if(!unlocked.includes(a.id)&&a.check(stats)){unlocked.push(a.id);newUnlock=true;showAchievementPopup(a)}});
   if(newUnlock)localStorage.setItem('planify_unlocked',JSON.stringify(unlocked));
   renderAchievements();
 }
@@ -365,15 +374,9 @@ function showAchievementPopup(a){
 
 function renderAchievements(){
   const filtered=achTab==='all'?ACHIEVEMENTS:ACHIEVEMENTS.filter(a=>a.cat===achTab);
-  const grid=document.getElementById('achievements-grid');
-  grid.innerHTML=filtered.map(a=>{
+  document.getElementById('achievements-grid').innerHTML=filtered.map(a=>{
     const on=unlocked.includes(a.id);
-    return`<div class="achievement ${on?'unlocked':''}">
-      ${!on?'<span class="achievement-locked-icon">🔒</span>':''}
-      <span class="achievement-icon">${a.icon}</span>
-      <div class="achievement-name">${a.name}</div>
-      <div class="achievement-desc">${a.desc}</div>
-    </div>`;
+    return`<div class="achievement ${on?'unlocked':''}">${!on?'<span class="achievement-locked-icon">🔒</span>':''}<span class="achievement-icon">${a.icon}</span><div class="achievement-name">${a.name}</div><div class="achievement-desc">${a.desc}</div></div>`;
   }).join('');
   document.getElementById('ach-count').textContent=`${unlocked.length} / ${ACHIEVEMENTS.length} desbloqueados`;
 }
@@ -386,18 +389,11 @@ function addTask(){
   document.getElementById('f-title').value='';
   document.getElementById('f-teacher').value='';
   document.getElementById('f-notes').value='';
-  render();
-  checkAchievements();
-  toast('✅ Tarea agregada');
+  render();checkAchievements();toast('✅ Tarea agregada');
 }
 
-function toggle(id){
-  const t=tasks.find(t=>t.id===id);
-  if(t){t.done=!t.done;save();render();if(t.done)checkAchievements();}
-}
-
+function toggle(id){const t=tasks.find(t=>t.id===id);if(t){t.done=!t.done;save();render();if(t.done)checkAchievements()}}
 function del(id){tasks=tasks.filter(t=>t.id!==id);save();render();toast('🗑 Eliminada')}
-
 function setFilter(f,btn){cf=f;document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');render()}
 
 function getFiltered(){
@@ -412,8 +408,7 @@ function getFiltered(){
 }
 
 function render(){
-  const f=getFiltered();
-  const now=new Date();now.setHours(0,0,0,0);
+  const f=getFiltered();const now=new Date();now.setHours(0,0,0,0);
   document.getElementById('n-total').textContent=tasks.length;
   document.getElementById('n-pending').textContent=tasks.filter(t=>!t.done).length;
   document.getElementById('n-today').textContent=tasks.filter(t=>{if(!t.date||t.done)return false;return new Date(t.date+'T00:00:00').getTime()===now.getTime()}).length;
@@ -425,54 +420,17 @@ function render(){
   const sorted=[...f].sort((a,b)=>{if(a.done!==b.done)return a.done?1:-1;if(!a.date)return 1;if(!b.date)return-1;return new Date(a.date)-new Date(b.date)});
   list.innerHTML=sorted.map(t=>{
     const due=getDue(t.date);
-    return`<div class="task-item ${t.pri} ${t.done?'done':''}">
-      <div class="task-check ${t.done?'on':''}" onclick="toggle(${t.id})"></div>
-      <div class="task-body">
-        <div class="task-tags"><span class="tag tag-subj ${t.subj}">${sNames[t.subj]||'Otra'}</span><span class="tag tag-type">${t.type}</span></div>
-        <div class="task-name">${t.title}</div>
-        ${t.teacher?`<div class="task-teacher">👨‍🏫 ${t.teacher}</div>`:''}
-        ${t.notes?`<div class="task-notes">📌 ${t.notes}</div>`:''}
-        <div class="task-due"><span class="due-tag ${due.c}">${due.l}</span></div>
-      </div>
-      <div class="task-actions"><button class="btn-del" onclick="del(${t.id})">✕</button><div class="pri-dot ${t.pri}"></div></div>
-    </div>`;
+    return`<div class="task-item ${t.pri} ${t.done?'done':''}"><div class="task-check ${t.done?'on':''}" onclick="toggle(${t.id})"></div><div class="task-body"><div class="task-tags"><span class="tag tag-subj ${t.subj}">${sNames[t.subj]||'Otra'}</span><span class="tag tag-type">${t.type}</span></div><div class="task-name">${t.title}</div>${t.teacher?`<div class="task-teacher">👨‍🏫 ${t.teacher}</div>`:''}${t.notes?`<div class="task-notes">📌 ${t.notes}</div>`:''}<div class="task-due"><span class="due-tag ${due.c}">${due.l}</span></div></div><div class="task-actions"><button class="btn-del" onclick="del(${t.id})">✕</button><div class="pri-dot ${t.pri}"></div></div></div>`;
   }).join('');
 }
 
 function save(){localStorage.setItem('planify_tasks',JSON.stringify(tasks))}
-
-function toast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg;
-  t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2500);
-}
-
-function checkNotifications(){
-  if(!('Notification' in window))return;
-  Notification.requestPermission().then(perm=>{
-    if(perm!=='granted')return;
-    navigator.serviceWorker.ready.then(sw=>{
-      sw.active&&sw.active.postMessage({
-        type:'CHECK_TASKS',
-        tasks:tasks
-      });
-    });
-  });
-}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
 
 document.getElementById('f-title').addEventListener('keydown',e=>{if(e.key==='Enter')addTask()});
+if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js').catch(()=>{})}
 
-if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('./sw.js').then(()=>{
-    setTimeout(checkNotifications,2000);
-  }).catch(()=>{});
-}
-
-initDate();
-renderAchievements();
-checkAchievements();
-render();
+initDate();renderAchievements();checkAchievements();render();
 </script>
 </body>
 </html>
