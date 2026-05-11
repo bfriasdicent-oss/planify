@@ -145,12 +145,16 @@ select option{background:var(--s2)}
 .empty-state{text-align:center;padding:4rem 2rem;color:var(--muted)}
 .empty-icon{font-size:2.5rem;margin-bottom:.75rem;opacity:.4;display:block}
 .empty-state h3{font-size:1rem;font-weight:700;color:var(--text);margin-bottom:.4rem}
-.nexus-banner{background:linear-gradient(135deg,rgba(108,99,255,.1),rgba(255,101,132,.1));border:1px solid rgba(108,99,255,.2);border-radius:20px;padding:1.5rem 2rem;margin-top:3rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+
+/* Nexus banner — con logo 🧮 en lugar de emoji de calendario */
+.nexus-banner{background:linear-gradient(135deg,rgba(79,70,229,.1),rgba(6,182,212,.1));border:1px solid rgba(79,70,229,.2);border-radius:20px;padding:1.5rem 2rem;margin-top:3rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.nexus-banner-left{display:flex;align-items:center;gap:12px}
 .banner-text h3{font-size:.95rem;font-weight:700;margin-bottom:.25rem}
 .banner-text p{font-size:.82rem;color:var(--muted)}
-.banner-btn{background:linear-gradient(135deg,var(--accent),#8b5cf6);border:none;border-radius:10px;padding:.6rem 1.25rem;color:#fff;font-family:var(--font);font-weight:700;font-size:.85rem;cursor:pointer;text-decoration:none;white-space:nowrap;display:inline-block;transition:transform .15s}
+.banner-btn{background:linear-gradient(135deg,#4f46e5,#06b6d4);border:none;border-radius:10px;padding:.6rem 1.25rem;color:#fff;font-family:var(--font);font-weight:700;font-size:.85rem;cursor:pointer;text-decoration:none;white-space:nowrap;display:inline-block;transition:transform .15s}
 .banner-btn:hover{transform:translateY(-2px)}
-.achievement-popup{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-150px);background:var(--s1);border:1px solid rgba(108,99,255,.5);border-radius:16px;padding:1rem 1.5rem;display:flex;align-items:center;gap:.75rem;z-index:999;box-shadow:0 8px 40px rgba(108,99,255,.35);transition:transform .4s cubic-bezier(.34,1.56,.64,1);white-space:nowrap}
+
+.achievement-popup{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-150px);background:var(--s1);border:1px solid rgba(108,99,255,.5);border-radius:16px;padding:1rem 1.25rem;display:flex;align-items:center;gap:.75rem;z-index:999;box-shadow:0 8px 40px rgba(108,99,255,.35);transition:transform .4s cubic-bezier(.34,1.56,.64,1);max-width:calc(100vw - 2rem);white-space:normal}
 .achievement-popup.show{transform:translateX(-50%) translateY(0)}
 .ach-pop-icon{font-size:1.8rem}
 .ach-pop-text strong{display:block;font-size:.9rem;font-weight:700;color:#a89dff}
@@ -162,7 +166,40 @@ footer{position:relative;z-index:1;text-align:center;padding:2rem 1.5rem 2.5rem;
 .footer-inner a{color:var(--muted);text-decoration:none;font-weight:600;transition:color .2s}
 .footer-inner a:hover{color:var(--text)}
 .footer-dot{width:3px;height:3px;background:var(--muted);border-radius:50%;opacity:.5}
-@media(max-width:640px){.top-row{grid-template-columns:1fr}.stats-row{grid-template-columns:repeat(2,1fr)}.form-grid{grid-template-columns:1fr}header{padding:0 1rem}main{padding:2rem 1rem 4rem}.nexus-banner{flex-direction:column;text-align:center}.achievements-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:640px){
+  header{padding:0 1rem}
+  main{padding:1.5rem .9rem 5rem}
+  .hero{padding:1.2rem 0 1.2rem}
+  .hero h1{font-size:clamp(1.8rem,8vw,2.6rem)}
+  .hero p{font-size:.92rem}
+  .top-row{grid-template-columns:1fr}
+  .streak-card{justify-content:flex-start}
+  .stats-row{grid-template-columns:repeat(2,1fr)}
+  .form-card{padding:1.25rem .9rem;border-radius:16px}
+  .form-grid{grid-template-columns:1fr}
+  input,select{min-height:48px;font-size:16px}
+  .btn-primary{min-height:52px;font-size:1rem}
+  .achievements-grid{grid-template-columns:repeat(3,1fr);gap:.4rem}
+  .achievement{padding:.65rem .4rem}
+  .achievement-icon{font-size:1.3rem}
+  .achievement-name{font-size:.62rem}
+  .achievement-desc{font-size:.55rem}
+  .nexus-banner{flex-direction:column;text-align:center;padding:1.25rem 1rem;gap:.75rem}
+  .nexus-banner-left{justify-content:center}
+  .task-item{padding:.85rem 1rem;gap:.7rem}
+  .task-name{font-size:.9rem}
+  .btn-del{padding:.45rem .5rem;min-height:36px}
+  .task-check{width:22px;height:22px;min-width:22px}
+  .ach-tabs{gap:.3rem}
+  .ach-tab{padding:.3rem .6rem;font-size:.7rem}
+  .filter-btn{padding:.4rem .75rem;font-size:.78rem}
+}
+@media(max-width:380px){
+  .stats-row{grid-template-columns:repeat(2,1fr)}
+  .achievements-grid{grid-template-columns:repeat(2,1fr)}
+  .hero h1{font-size:1.65rem}
+  .stat-num{font-size:1.5rem}
+}
 </style>
 </head>
 <body>
@@ -239,13 +276,13 @@ footer{position:relative;z-index:1;text-align:center;padding:2rem 1.5rem 2.5rem;
   <div class="form-card">
     <div class="form-title"><div class="form-title-dot"></div>Nueva tarea</div>
     <div class="form-grid">
-      <div class="field"><label>Materia</label><select id="f-subj"><option value="mat">📐 Matemáticas</option><option value="esp">📖 Español</option><option value="cien">🔬 Ciencias</option><option value="hist">🌍 Historia</option><option value="ing">🇺🇸 Inglés</option><option value="arte">🎨 Arte</option><option value="edu">⚽ Ed. Física</option><option value="otro">📌 Otra</option></select></div>
-      <div class="field"><label>Profe</label><input type="text" id="f-teacher" placeholder="ej: Prof. García"></div>
-      <div class="field" style="grid-column:1/-1"><label>Descripción</label><input type="text" id="f-title" placeholder="ej: Cartulina sobre la Revolución Francesa"></div>
-      <div class="field"><label>Tipo</label><select id="f-type"><option>📝 Tarea</option><option>🗂 Trabajo</option><option>🚀 Proyecto</option><option>📋 Examen</option><option>🖼 Cartulina</option><option>📄 Informe</option><option>🏗 Maqueta</option><option>🎤 Exposición</option></select></div>
-      <div class="field"><label>Prioridad</label><select id="f-pri"><option value="medium">🟡 Normal</option><option value="high">🟠 Alta</option><option value="urgent">🔴 Urgente</option><option value="low">🟢 Baja</option></select></div>
-      <div class="field"><label>Fecha de entrega</label><input type="date" id="f-date"></div>
-      <div class="field"><label>Notas</label><input type="text" id="f-notes" placeholder="ej: en parejas, traer materiales..."></div>
+      <div class="field"><label>Materia</label><select id="f-subj" aria-label="Materia"><option value="mat">📐 Matemáticas</option><option value="esp">📖 Español</option><option value="cien">🔬 Ciencias</option><option value="hist">🌍 Historia</option><option value="ing">🇺🇸 Inglés</option><option value="arte">🎨 Arte</option><option value="edu">⚽ Ed. Física</option><option value="otro">📌 Otra</option></select></div>
+      <div class="field"><label>Profe</label><input type="text" id="f-teacher" placeholder="ej: Prof. García" aria-label="Nombre del profesor"></div>
+      <div class="field" style="grid-column:1/-1"><label>Descripción</label><input type="text" id="f-title" placeholder="ej: Cartulina sobre la Revolución Francesa" aria-label="Descripción de la tarea"></div>
+      <div class="field"><label>Tipo</label><select id="f-type" aria-label="Tipo de tarea"><option>📝 Tarea</option><option>🗂 Trabajo</option><option>🚀 Proyecto</option><option>📋 Examen</option><option>🖼 Cartulina</option><option>📄 Informe</option><option>🏗 Maqueta</option><option>🎤 Exposición</option></select></div>
+      <div class="field"><label>Prioridad</label><select id="f-pri" aria-label="Prioridad"><option value="medium">🟡 Normal</option><option value="high">🟠 Alta</option><option value="urgent">🔴 Urgente</option><option value="low">🟢 Baja</option></select></div>
+      <div class="field"><label>Fecha de entrega</label><input type="date" id="f-date" aria-label="Fecha de entrega"></div>
+      <div class="field"><label>Notas</label><input type="text" id="f-notes" placeholder="ej: en parejas, traer materiales..." aria-label="Notas adicionales"></div>
     </div>
     <button class="btn-primary" onclick="addTask()">+ Agregar tarea</button>
   </div>
@@ -258,8 +295,27 @@ footer{position:relative;z-index:1;text-align:center;padding:2rem 1.5rem 2.5rem;
   </div>
   <div class="list-header"><span class="list-title">Mis tareas</span><span class="list-count" id="list-count">0 tareas</span></div>
   <div id="tasks-list"></div>
+
+  <!-- Banner Nexus: sin emoji de calendario, con ícono de calculadora -->
   <div class="nexus-banner">
-    <div class="banner-text"><h3>🧮 Calcula tu promedio escolar</h3><p>Nexus — gratis, sin registro, al instante.</p></div>
+    <div class="nexus-banner-left">
+      <svg width="40" height="40" viewBox="0 0 42 42" xmlns="http://www.w3.org/2000/svg" aria-label="Nexus logo" style="flex-shrink:0">
+        <defs>
+          <linearGradient id="nxBg2" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#4f46e5"/>
+            <stop offset="100%" stop-color="#06b6d4"/>
+          </linearGradient>
+        </defs>
+        <rect width="42" height="42" rx="12" fill="url(#nxBg2)"/>
+        <line x1="11" y1="31" x2="11" y2="11" stroke="rgba(255,255,255,0.95)" stroke-width="3.5" stroke-linecap="round"/>
+        <line x1="31" y1="31" x2="31" y2="11" stroke="rgba(255,255,255,0.95)" stroke-width="3.5" stroke-linecap="round"/>
+        <line x1="11" y1="11" x2="31" y2="31" stroke="rgba(255,255,255,0.7)" stroke-width="3.5" stroke-linecap="round"/>
+      </svg>
+      <div class="banner-text">
+        <h3>Calcula tu promedio escolar</h3>
+        <p>Nexus — gratis, sin registro, al instante.</p>
+      </div>
+    </div>
     <a href="https://bfriasdicent-oss.github.io/nexus/" target="_blank" class="banner-btn">Ir a Nexus →</a>
   </div>
 </main>
@@ -420,7 +476,7 @@ function render(){
   const sorted=[...f].sort((a,b)=>{if(a.done!==b.done)return a.done?1:-1;if(!a.date)return 1;if(!b.date)return-1;return new Date(a.date)-new Date(b.date)});
   list.innerHTML=sorted.map(t=>{
     const due=getDue(t.date);
-    return`<div class="task-item ${t.pri} ${t.done?'done':''}"><div class="task-check ${t.done?'on':''}" onclick="toggle(${t.id})"></div><div class="task-body"><div class="task-tags"><span class="tag tag-subj ${t.subj}">${sNames[t.subj]||'Otra'}</span><span class="tag tag-type">${t.type}</span></div><div class="task-name">${t.title}</div>${t.teacher?`<div class="task-teacher">👨‍🏫 ${t.teacher}</div>`:''}${t.notes?`<div class="task-notes">📌 ${t.notes}</div>`:''}<div class="task-due"><span class="due-tag ${due.c}">${due.l}</span></div></div><div class="task-actions"><button class="btn-del" onclick="del(${t.id})">✕</button><div class="pri-dot ${t.pri}"></div></div></div>`;
+    return`<div class="task-item ${t.pri} ${t.done?'done':''}"><div class="task-check ${t.done?'on':''}" onclick="toggle(${t.id})" role="checkbox" aria-checked="${t.done}" aria-label="Marcar como completada"></div><div class="task-body"><div class="task-tags"><span class="tag tag-subj ${t.subj}">${sNames[t.subj]||'Otra'}</span><span class="tag tag-type">${t.type}</span></div><div class="task-name">${t.title}</div>${t.teacher?`<div class="task-teacher">👨‍🏫 ${t.teacher}</div>`:''}${t.notes?`<div class="task-notes">📌 ${t.notes}</div>`:''}<div class="task-due"><span class="due-tag ${due.c}">${due.l}</span></div></div><div class="task-actions"><button class="btn-del" onclick="del(${t.id})" aria-label="Eliminar tarea">✕</button><div class="pri-dot ${t.pri}"></div></div></div>`;
   }).join('');
 }
 
