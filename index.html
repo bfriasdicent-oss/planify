@@ -40,6 +40,8 @@
 <meta name="theme-color" content="#6c63ff">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Planify">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="icon-192.png">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#07080f;--s1:#0d0f1e;--s2:#12152a;--accent:#6c63ff;--accent2:#ff6584;--accent3:#43e97b;--accent4:#f7971e;--text:#f0f0ff;--muted:#7b7fa8;--border:rgba(108,99,255,.15);--r:14px;--font:'DM Sans',system-ui,sans-serif}
@@ -212,10 +214,14 @@ footer{position:relative;z-index:1;text-align:center;padding:2rem 1.5rem 2.5rem;
 .thanks-text{display:flex;flex-direction:column;gap:.3rem}
 .thanks-text strong{font-size:.9rem;color:var(--text)}
 .thanks-text span{font-size:.8rem;color:var(--muted);line-height:1.6}
+.install-manual{display:flex;flex-direction:column;gap:.35rem}
+.install-step{font-size:.78rem;color:var(--muted);line-height:1.5}
+.install-step strong{color:var(--text)}
 @media(max-width:640px){
   .download-card{flex-direction:column;align-items:flex-start;padding:1.1rem}
   .btn-download{width:100%;justify-content:center}
-}
+  header{padding:0 1rem}
+  main{padding:1.5rem .9rem 5rem}
   .hero{padding:1.2rem 0 1.2rem}
   .hero h1{font-size:clamp(1.8rem,8vw,2.6rem)}
   .hero p{font-size:.92rem}
@@ -370,18 +376,14 @@ footer{position:relative;z-index:1;text-align:center;padding:2rem 1.5rem 2.5rem;
     <p style="font-size:.78rem;color:var(--muted);line-height:1.7">Planify te ayuda a organizar todas tus tareas escolares en un solo lugar. Agrega trabajos de Matemáticas, Español, Ciencias, Historia e Inglés con su fecha de entrega y prioridad. Recibe alertas de tareas vencidas, mantén una racha diaria y desbloquea logros mientras completas asignaciones. Todo se guarda en tu dispositivo, sin cuenta, sin costo, gratis para siempre.</p>
   </div>
 
-  <!-- SECCIÓN DE DESCARGA -->
+  <!-- SECCIÓN INSTALAR -->
   <div class="download-section" id="download-section">
     <div class="download-card">
       <div class="download-icon">
         <svg width="32" height="32" viewBox="0 0 42 42" xmlns="http://www.w3.org/2000/svg">
           <defs>
-            <linearGradient id="plDlBg" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#6c63ff"/><stop offset="100%" stop-color="#a78bfa"/>
-            </linearGradient>
-            <linearGradient id="plDlArc" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stop-color="#ff6584"/><stop offset="100%" stop-color="#f7971e"/>
-            </linearGradient>
+            <linearGradient id="plDlBg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#6c63ff"/><stop offset="100%" stop-color="#a78bfa"/></linearGradient>
+            <linearGradient id="plDlArc" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#ff6584"/><stop offset="100%" stop-color="#f7971e"/></linearGradient>
           </defs>
           <rect width="42" height="42" rx="12" fill="url(#plDlBg)"/>
           <circle cx="21" cy="21" r="7" fill="none" stroke="rgba(255,255,255,0.85)" stroke-width="1.5"/>
@@ -393,15 +395,17 @@ footer{position:relative;z-index:1;text-align:center;padding:2rem 1.5rem 2.5rem;
         </svg>
       </div>
       <div class="download-info">
-        <div class="download-title">Planify — Agenda Escolar</div>
-        <div class="download-sub">Archivo HTML · Tus tareas se guardan · Gratis</div>
+        <div class="download-title">Instalar Planify en tu dispositivo</div>
+        <div class="download-sub">Úsala desde tu pantalla de inicio — tus tareas se guardan</div>
       </div>
-      <button class="btn-download" onclick="downloadPlanify()" aria-label="Descargar Planify">
-        <span class="btn-download-icon">⬇</span> Descargar
+      <button class="btn-download" id="btn-install" aria-label="Instalar Planify" style="display:none">
+        <span class="btn-download-icon">⬇</span> Instalar app
       </button>
+      <div class="install-manual" id="install-manual">
+        <div class="install-step">🤖 <strong>Android/Chrome:</strong> menú <strong>⋮</strong> → Añadir a pantalla inicio</div>
+        <div class="install-step">🍎 <strong>iPhone/Safari:</strong> botón <strong>compartir □↑</strong> → Agregar a inicio</div>
+      </div>
     </div>
-
-    <!-- Mensaje de gracias -->
     <div class="thanks-msg" id="thanks-msg">
       <div class="thanks-icon">🙏</div>
       <div class="thanks-text">
@@ -579,24 +583,33 @@ function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t
 document.getElementById('f-title').addEventListener('keydown',e=>{if(e.key==='Enter')addTask()});
 if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js').catch(()=>{})}
 
-// Descarga directa
-function downloadPlanify(){
-  const html=document.documentElement.outerHTML;
-  const blob=new Blob([html],{type:'text/html;charset=utf-8'});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');
-  a.href=url;
-  a.download='Planify.html';
-  a.click();
-  URL.revokeObjectURL(url);
-  clearTimeout(window._thanksTimer);
-  document.getElementById('thanks-msg').classList.remove('show');
-}
+// PWA install
+let deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();
+  deferredPrompt=e;
+  const btn=document.getElementById('btn-install');
+  const manual=document.getElementById('install-manual');
+  btn.style.display='flex';
+  manual.style.display='none';
+});
+document.getElementById('btn-install').addEventListener('click',()=>{
+  if(!deferredPrompt)return;
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(r=>{
+    if(r.outcome==='accepted'){
+      document.getElementById('btn-install').style.display='none';
+      clearTimeout(window._thanksTimer);
+      document.getElementById('thanks-msg').classList.remove('show');
+    }
+    deferredPrompt=null;
+  });
+});
 
-// Mostrar mensaje de gracias si no descarga en 8s
+// Mostrar mensaje de gracias si no instala en 10s
 window._thanksTimer=setTimeout(()=>{
   document.getElementById('thanks-msg').classList.add('show');
-},8000);
+},10000);
 
 initDate();renderAchievements();checkAchievements();render();
 </script>
