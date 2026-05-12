@@ -296,6 +296,8 @@ footer{position:relative;z-index:1;text-align:center;padding:2rem 1.5rem 2.5rem;
     <div class="hero-eyebrow">Agenda escolar inteligente</div>
     <h1>Nunca olvides<br><em>una tarea otra vez</em></h1>
     <p>Organiza, completa y desbloquea logros. Tu mejor versión escolar.</p>
+    <button id="notif-btn" style="margin-top:1rem;background:var(--s1);border:1px solid var(--border);border-radius:20px;padding:.4rem 1rem;color:var(--muted);font-family:var(--font);font-size:.82rem;font-weight:600;cursor:pointer;transition:all .2s">🔕 Activar notificaciones</button>
+    <style>#notif-btn.active{background:rgba(67,233,123,.1);border-color:var(--accent3);color:var(--accent3)}#notif-btn:hover:not(.active){border-color:var(--accent);color:var(--text)}</style>
   </div>
   <div class="top-row">
     <div class="streak-card">
@@ -580,6 +582,138 @@ function render(){
 function save(){localStorage.setItem('planify_tasks',JSON.stringify(tasks))}
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
 
+// ─── NOTIFICACIONES ───────────────────────────────────────────
+const NOTIF_MSGS={
+  overdue:[
+    {t:'⚠️ Tarea vencida',b:'"{name}" de {teacher} ya venció. ¡Habla con tu profe ahora!'},
+    {t:'🚨 ¡Se te pasó!',b:'"{name}" estaba para hoy. Todavía puedes entregar tarde.'},
+    {t:'😬 Tarea vencida',b:'No entregaste "{name}". Contacta a {teacher} cuanto antes.'}
+  ],
+  today:[
+    {t:'🔥 ¡Entrega HOY!',b:'"{name}" de {teacher} es para hoy. ¡No lo dejes para después!'},
+    {t:'⏰ Último día',b:'Hoy vence "{name}". Dale, tú puedes terminarlo.'},
+    {t:'🎯 Para hoy',b:'"{name}" tiene que entregarse hoy. ¡A trabajar!'}
+  ],
+  tomorrow:[
+    {t:'📅 Mañana vence',b:'"{name}" es para mañana. Mejor termínalo esta noche.'},
+    {t:'⏳ Queda 1 día',b:'"{name}" de {teacher} vence mañana. ¡No esperes más!'},
+    {t:'🌙 Recuerda mañana',b:'Mañana debes entregar "{name}". Aprovecha hoy.'}
+  ],
+  days3:[
+    {t:'📌 3 días para entregar',b:'"{name}" vence en 3 días. Buen momento para empezar.'},
+    {t:'🗓 Faltan 3 días',b:'Tienes hasta el {date} para "{name}". No lo dejes para el último.'},
+    {t:'💡 Planifica ya',b:'"{name}" de {teacher} vence pronto. Organízate desde hoy.'}
+  ],
+  week:[
+    {t:'📚 Esta semana',b:'"{name}" vence esta semana. Avanza un poco cada día.'},
+    {t:'🎒 Tarea próxima',b:'No olvides "{name}" de {teacher}. Vence el {date}.'},
+    {t:'✏️ Recuerda esta tarea',b:'"{name}" te espera. Tienes hasta el {date}.'}
+  ]
+};
+
+function formatDate(ds){
+  if(!ds)return'';
+  const d=new Date(ds+'T00:00:00');
+  return d.toLocaleDateString('es',{day:'numeric',month:'short'});
+}
+
+function buildMsg(tpl,task){
+  return{
+    title:tpl.t,
+    body:tpl.b
+      .replace('{name}',task.title)
+      .replace('{teacher}',task.teacher||'tu profe')
+      .replace('{date}',formatDate(task.date))
+  };
+}
+
+function pickMsg(pool,task){
+  const tpl=pool[Math.floor(Math.random()*pool.length)];
+  return buildMsg(tpl,task);
+}
+
+async function requestNotifPermission(){
+  if(!('Notification' in window))return false;
+  if(Notification.permission==='granted')return true;
+  const r=await Notification.requestPermission();
+  return r==='granted';
+}
+
+function scheduleNotifications(){
+  if(!('Notification' in window)||Notification.permission!=='granted')return;
+  const now=new Date();now.setHours(0,0,0,0);
+  const pending=tasks.filter(t=>!t.done);
+  pending.forEach(task=>{
+    if(!task.date)return;
+    const due=new Date(task.date+'T00:00:00');
+    const diff=Math.floor((due-now)/864e5);
+    let pool=null;
+    if(diff<0)pool=NOTIF_MSGS.overdue;
+    else if(diff===0)pool=NOTIF_MSGS.today;
+    else if(diff===1)pool=NOTIF_MSGS.tomorrow;
+    else if(diff<=3)pool=NOTIF_MSGS.days3;
+    else if(diff<=7)pool=NOTIF_MSGS.week;
+    if(pool){
+      const msg=pickMsg(pool,task);
+      // Guardar en localStorage para que el SW las dispare
+      const key=`notif_${task.id}_${diff}`;
+      if(!localStorage.getItem(key)){
+        localStorage.setItem(key,'1');
+        // Mostrar notificación via SW si está disponible, sino directa
+        if('serviceWorker' in navigator&&navigator.serviceWorker.controller){
+          navigator.serviceWorker.controller.postMessage({
+            type:'NOTIFY',
+            title:msg.title,
+            body:msg.body,
+            tag:`task-${task.id}`,
+            url:'./'
+          });
+        } else {
+          const n=new Notification(msg.title,{
+            body:msg.body,
+            icon:'./icon-192.png',
+            badge:'./icon-192.png',
+            tag:`task-${task.id}`,
+            requireInteraction:diff<=0
+          });
+          n.onclick=()=>{window.focus();n.close()};
+        }
+      }
+    }
+  });
+}
+
+async function initNotifications(){
+  const granted=await requestNotifPermission();
+  if(granted){
+    scheduleNotifications();
+    // Revisar cada hora
+    setInterval(scheduleNotifications,60*60*1000);
+    // Limpiar keys viejas de tareas completadas
+    tasks.filter(t=>t.done).forEach(t=>{
+      ['overdue','today','tomorrow','days3','week',['-1','-2','-3']].forEach((_,i)=>{
+        localStorage.removeItem(`notif_${t.id}_${i-1}`);
+      });
+    });
+  }
+}
+
+// Botón de activar notificaciones
+function renderNotifBtn(){
+  const btn=document.getElementById('notif-btn');
+  if(!btn)return;
+  if(!('Notification' in window)){btn.style.display='none';return}
+  if(Notification.permission==='granted'){
+    btn.textContent='🔔 Notificaciones activas';
+    btn.classList.add('active');
+    btn.onclick=null;
+  } else {
+    btn.textContent='🔕 Activar notificaciones';
+    btn.onclick=async()=>{await initNotifications();renderNotifBtn()};
+  }
+}
+// ─────────────────────────────────────────────────────────────
+
 document.getElementById('f-title').addEventListener('keydown',e=>{if(e.key==='Enter')addTask()});
 if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js').catch(()=>{})}
 
@@ -604,6 +738,7 @@ document.getElementById('btn-install').addEventListener('click',()=>{
     }
     deferredPrompt=null;
   });
+
 });
 
 // Mostrar mensaje de gracias si no instala en 10s
@@ -612,6 +747,8 @@ window._thanksTimer=setTimeout(()=>{
 },10000);
 
 initDate();renderAchievements();checkAchievements();render();
+renderNotifBtn();
+if(Notification.permission==='granted')scheduleNotifications();
 </script>
 </body>
 </html>
