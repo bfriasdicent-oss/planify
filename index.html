@@ -292,6 +292,7 @@ footer{position:relative;z-index:1;text-align:center;padding:2rem 1.5rem 2.5rem;
 </header>
 
 <main>
+  <!-- HERO compacto -->
   <div class="hero">
     <div class="hero-eyebrow">Agenda escolar inteligente</div>
     <h1>Nunca olvides<br><em>una tarea otra vez</em></h1>
@@ -299,7 +300,35 @@ footer{position:relative;z-index:1;text-align:center;padding:2rem 1.5rem 2.5rem;
     <button id="notif-btn" style="margin-top:1rem;background:var(--s1);border:1px solid var(--border);border-radius:20px;padding:.4rem 1rem;color:var(--muted);font-family:var(--font);font-size:.82rem;font-weight:600;cursor:pointer;transition:all .2s">🔕 Activar notificaciones</button>
     <style>#notif-btn.active{background:rgba(67,233,123,.1);border-color:var(--accent3);color:var(--accent3)}#notif-btn:hover:not(.active){border-color:var(--accent);color:var(--text)}</style>
   </div>
-  <div class="top-row">
+
+  <!-- 1. FORMULARIO — lo primero que ve el usuario -->
+  <div class="form-card">
+    <div class="form-title"><div class="form-title-dot"></div>Nueva tarea</div>
+    <div class="form-grid">
+      <div class="field"><label>Materia</label><select id="f-subj" aria-label="Materia"><option value="mat">📐 Matemáticas</option><option value="esp">📖 Español</option><option value="cien">🔬 Ciencias</option><option value="hist">🌍 Historia</option><option value="ing">🇺🇸 Inglés</option><option value="arte">🎨 Arte</option><option value="edu">⚽ Ed. Física</option><option value="otro">📌 Otra</option></select></div>
+      <div class="field"><label>Profe</label><input type="text" id="f-teacher" placeholder="ej: Prof. García" aria-label="Nombre del profesor"></div>
+      <div class="field" style="grid-column:1/-1"><label>Descripción</label><input type="text" id="f-title" placeholder="ej: Cartulina sobre la Revolución Francesa" aria-label="Descripción de la tarea"></div>
+      <div class="field"><label>Tipo</label><select id="f-type" aria-label="Tipo de tarea"><option>📝 Tarea</option><option>🗂 Trabajo</option><option>🚀 Proyecto</option><option>📋 Examen</option><option>🖼 Cartulina</option><option>📄 Informe</option><option>🏗 Maqueta</option><option>🎤 Exposición</option></select></div>
+      <div class="field"><label>Prioridad</label><select id="f-pri" aria-label="Prioridad"><option value="medium">🟡 Normal</option><option value="high">🟠 Alta</option><option value="urgent">🔴 Urgente</option><option value="low">🟢 Baja</option></select></div>
+      <div class="field"><label>Fecha de entrega</label><input type="date" id="f-date" aria-label="Fecha de entrega"></div>
+      <div class="field"><label>Notas</label><input type="text" id="f-notes" placeholder="ej: en parejas, traer materiales..." aria-label="Notas adicionales"></div>
+    </div>
+    <button class="btn-primary" onclick="addTask()">+ Agregar tarea</button>
+  </div>
+
+  <!-- 2. LISTA DE TAREAS -->
+  <div class="filter-row">
+    <button class="filter-btn active" onclick="setFilter('all',this)">Todas</button>
+    <button class="filter-btn" onclick="setFilter('pending',this)">Pendientes</button>
+    <button class="filter-btn" onclick="setFilter('today',this)">Hoy</button>
+    <button class="filter-btn" onclick="setFilter('urgent',this)">🔴 Urgentes</button>
+    <button class="filter-btn" onclick="setFilter('done',this)">✅ Listas</button>
+  </div>
+  <div class="list-header"><span class="list-title">Mis tareas</span><span class="list-count" id="list-count">0 tareas</span></div>
+  <div id="tasks-list"></div>
+
+  <!-- 3. ESTADÍSTICAS — secundario -->
+  <div class="top-row" style="margin-top:2rem">
     <div class="streak-card">
       <div class="streak-flame">🔥</div>
       <div><div class="streak-num" id="streak-num">0</div><div class="streak-label">Días seguidos</div></div>
@@ -311,7 +340,9 @@ footer{position:relative;z-index:1;text-align:center;padding:2rem 1.5rem 2.5rem;
       <div class="stat-card c-orange"><span class="stat-num" id="n-done">0</span><span class="stat-label">Completadas</span></div>
     </div>
   </div>
-  <div class="achievements-section">
+
+  <!-- 4. LOGROS — al final -->
+  <div class="achievements-section" style="margin-top:2rem">
     <div class="section-header">
       <span class="section-title">🏆 Logros</span>
       <span class="section-sub" id="ach-count">0 desbloqueados</span>
@@ -328,39 +359,12 @@ footer{position:relative;z-index:1;text-align:center;padding:2rem 1.5rem 2.5rem;
     </div>
     <div class="achievements-grid" id="achievements-grid"></div>
   </div>
-  <div class="form-card">
-    <div class="form-title"><div class="form-title-dot"></div>Nueva tarea</div>
-    <div class="form-grid">
-      <div class="field"><label>Materia</label><select id="f-subj" aria-label="Materia"><option value="mat">📐 Matemáticas</option><option value="esp">📖 Español</option><option value="cien">🔬 Ciencias</option><option value="hist">🌍 Historia</option><option value="ing">🇺🇸 Inglés</option><option value="arte">🎨 Arte</option><option value="edu">⚽ Ed. Física</option><option value="otro">📌 Otra</option></select></div>
-      <div class="field"><label>Profe</label><input type="text" id="f-teacher" placeholder="ej: Prof. García" aria-label="Nombre del profesor"></div>
-      <div class="field" style="grid-column:1/-1"><label>Descripción</label><input type="text" id="f-title" placeholder="ej: Cartulina sobre la Revolución Francesa" aria-label="Descripción de la tarea"></div>
-      <div class="field"><label>Tipo</label><select id="f-type" aria-label="Tipo de tarea"><option>📝 Tarea</option><option>🗂 Trabajo</option><option>🚀 Proyecto</option><option>📋 Examen</option><option>🖼 Cartulina</option><option>📄 Informe</option><option>🏗 Maqueta</option><option>🎤 Exposición</option></select></div>
-      <div class="field"><label>Prioridad</label><select id="f-pri" aria-label="Prioridad"><option value="medium">🟡 Normal</option><option value="high">🟠 Alta</option><option value="urgent">🔴 Urgente</option><option value="low">🟢 Baja</option></select></div>
-      <div class="field"><label>Fecha de entrega</label><input type="date" id="f-date" aria-label="Fecha de entrega"></div>
-      <div class="field"><label>Notas</label><input type="text" id="f-notes" placeholder="ej: en parejas, traer materiales..." aria-label="Notas adicionales"></div>
-    </div>
-    <button class="btn-primary" onclick="addTask()">+ Agregar tarea</button>
-  </div>
-  <div class="filter-row">
-    <button class="filter-btn active" onclick="setFilter('all',this)">Todas</button>
-    <button class="filter-btn" onclick="setFilter('pending',this)">Pendientes</button>
-    <button class="filter-btn" onclick="setFilter('today',this)">Hoy</button>
-    <button class="filter-btn" onclick="setFilter('urgent',this)">🔴 Urgentes</button>
-    <button class="filter-btn" onclick="setFilter('done',this)">✅ Listas</button>
-  </div>
-  <div class="list-header"><span class="list-title">Mis tareas</span><span class="list-count" id="list-count">0 tareas</span></div>
-  <div id="tasks-list"></div>
 
-  <!-- Banner Nexus: sin emoji de calendario, con ícono de calculadora -->
-  <div class="nexus-banner">
+  <!-- Banner Nexus -->
+  <div class="nexus-banner" style="margin-top:2rem">
     <div class="nexus-banner-left">
       <svg width="40" height="40" viewBox="0 0 42 42" xmlns="http://www.w3.org/2000/svg" aria-label="Nexus logo" style="flex-shrink:0">
-        <defs>
-          <linearGradient id="nxBg2" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#4f46e5"/>
-            <stop offset="100%" stop-color="#06b6d4"/>
-          </linearGradient>
-        </defs>
+        <defs><linearGradient id="nxBg2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#4f46e5"/><stop offset="100%" stop-color="#06b6d4"/></linearGradient></defs>
         <rect width="42" height="42" rx="12" fill="url(#nxBg2)"/>
         <line x1="11" y1="31" x2="11" y2="11" stroke="rgba(255,255,255,0.95)" stroke-width="3.5" stroke-linecap="round"/>
         <line x1="31" y1="31" x2="31" y2="11" stroke="rgba(255,255,255,0.95)" stroke-width="3.5" stroke-linecap="round"/>
@@ -372,7 +376,9 @@ footer{position:relative;z-index:1;text-align:center;padding:2rem 1.5rem 2.5rem;
       </div>
     </div>
     <a href="https://bfriasdicent-oss.github.io/nexus/" target="_blank" class="banner-btn">Ir a Nexus →</a>
-  </div>  <!-- Texto SEO -->
+  </div>
+
+  <!-- Texto SEO -->
   <div style="margin-top:3rem;padding:1.5rem;background:var(--s1);border:1px solid var(--border);border-radius:16px">
     <h2 style="font-size:.85rem;font-weight:700;color:var(--text);margin-bottom:.6rem">La agenda escolar gratuita para estudiantes de todo el mundo</h2>
     <p style="font-size:.78rem;color:var(--muted);line-height:1.7">Planify te ayuda a organizar todas tus tareas escolares en un solo lugar. Agrega trabajos de Matemáticas, Español, Ciencias, Historia e Inglés con su fecha de entrega y prioridad. Recibe alertas de tareas vencidas, mantén una racha diaria y desbloquea logros mientras completas asignaciones. Todo se guarda en tu dispositivo, sin cuenta, sin costo, gratis para siempre.</p>
