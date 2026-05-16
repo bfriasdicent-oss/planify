@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RC2YFN8SC9"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-RC2YFN8SC9');
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Planify — Agenda Escolar Gratis | Organiza tus Tareas</title>
@@ -177,7 +185,6 @@ select option{background:var(--s2)}
 .empty-icon{font-size:2.5rem;margin-bottom:.75rem;opacity:.4;display:block}
 .empty-state h3{font-size:1rem;font-weight:700;color:var(--text);margin-bottom:.4rem}
 
-/* Nexus banner — con logo 🧮 en lugar de emoji de calendario */
 .nexus-banner{background:linear-gradient(135deg,rgba(79,70,229,.1),rgba(6,182,212,.1));border:1px solid rgba(79,70,229,.2);border-radius:20px;padding:1.5rem 2rem;margin-top:3rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
 .nexus-banner-left{display:flex;align-items:center;gap:12px}
 .banner-text h3{font-size:.95rem;font-weight:700;margin-bottom:.25rem}
@@ -197,7 +204,6 @@ footer{position:relative;z-index:1;text-align:center;padding:2rem 1.5rem 2.5rem;
 .footer-inner a{color:var(--muted);text-decoration:none;font-weight:600;transition:color .2s}
 .footer-inner a:hover{color:var(--text)}
 .footer-dot{width:3px;height:3px;background:var(--muted);border-radius:50%;opacity:.5}
-/* DOWNLOAD SECTION */
 .download-section{margin-top:2rem;display:flex;flex-direction:column;gap:1rem}
 .download-card{background:var(--s1);border:1px solid rgba(108,99,255,.3);border-radius:20px;padding:1.4rem 1.75rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
 .download-icon{flex-shrink:0}
@@ -292,7 +298,6 @@ footer{position:relative;z-index:1;text-align:center;padding:2rem 1.5rem 2.5rem;
 </header>
 
 <main>
-  <!-- HERO compacto -->
   <div class="hero">
     <div class="hero-eyebrow">Agenda escolar inteligente</div>
     <h1>Nunca olvides<br><em>una tarea otra vez</em></h1>
@@ -301,7 +306,6 @@ footer{position:relative;z-index:1;text-align:center;padding:2rem 1.5rem 2.5rem;
     <style>#notif-btn.active{background:rgba(67,233,123,.1);border-color:var(--accent3);color:var(--accent3)}#notif-btn:hover:not(.active){border-color:var(--accent);color:var(--text)}</style>
   </div>
 
-  <!-- 1. FORMULARIO — lo primero que ve el usuario -->
   <div class="form-card">
     <div class="form-title"><div class="form-title-dot"></div>Nueva tarea</div>
     <div class="form-grid">
@@ -316,7 +320,6 @@ footer{position:relative;z-index:1;text-align:center;padding:2rem 1.5rem 2.5rem;
     <button class="btn-primary" onclick="addTask()">+ Agregar tarea</button>
   </div>
 
-  <!-- 2. LISTA DE TAREAS -->
   <div class="filter-row">
     <button class="filter-btn active" onclick="setFilter('all',this)">Todas</button>
     <button class="filter-btn" onclick="setFilter('pending',this)">Pendientes</button>
@@ -327,7 +330,6 @@ footer{position:relative;z-index:1;text-align:center;padding:2rem 1.5rem 2.5rem;
   <div class="list-header"><span class="list-title">Mis tareas</span><span class="list-count" id="list-count">0 tareas</span></div>
   <div id="tasks-list"></div>
 
-  <!-- 3. ESTADÍSTICAS — secundario -->
   <div class="top-row" style="margin-top:2rem">
     <div class="streak-card">
       <div class="streak-flame">🔥</div>
@@ -341,7 +343,6 @@ footer{position:relative;z-index:1;text-align:center;padding:2rem 1.5rem 2.5rem;
     </div>
   </div>
 
-  <!-- 4. LOGROS — al final -->
   <div class="achievements-section" style="margin-top:2rem">
     <div class="section-header">
       <span class="section-title">🏆 Logros</span>
@@ -360,7 +361,6 @@ footer{position:relative;z-index:1;text-align:center;padding:2rem 1.5rem 2.5rem;
     <div class="achievements-grid" id="achievements-grid"></div>
   </div>
 
-  <!-- Banner Nexus -->
   <div class="nexus-banner" style="margin-top:2rem">
     <div class="nexus-banner-left">
       <svg width="40" height="40" viewBox="0 0 42 42" xmlns="http://www.w3.org/2000/svg" aria-label="Nexus logo" style="flex-shrink:0">
@@ -378,13 +378,11 @@ footer{position:relative;z-index:1;text-align:center;padding:2rem 1.5rem 2.5rem;
     <a href="https://bfriasdicent-oss.github.io/nexus/" target="_blank" class="banner-btn">Ir a Nexus →</a>
   </div>
 
-  <!-- Texto SEO -->
   <div style="margin-top:3rem;padding:1.5rem;background:var(--s1);border:1px solid var(--border);border-radius:16px">
     <h2 style="font-size:.85rem;font-weight:700;color:var(--text);margin-bottom:.6rem">La agenda escolar gratuita para estudiantes de todo el mundo</h2>
     <p style="font-size:.78rem;color:var(--muted);line-height:1.7">Planify te ayuda a organizar todas tus tareas escolares en un solo lugar. Agrega trabajos de Matemáticas, Español, Ciencias, Historia e Inglés con su fecha de entrega y prioridad. Recibe alertas de tareas vencidas, mantén una racha diaria y desbloquea logros mientras completas asignaciones. Todo se guarda en tu dispositivo, sin cuenta, sin costo, gratis para siempre.</p>
   </div>
 
-  <!-- SECCIÓN INSTALAR -->
   <div class="download-section" id="download-section">
     <div class="download-card">
       <div class="download-icon">
@@ -588,7 +586,6 @@ function render(){
 function save(){localStorage.setItem('planify_tasks',JSON.stringify(tasks))}
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
 
-// ─── NOTIFICACIONES ───────────────────────────────────────────
 const NOTIF_MSGS={
   overdue:[
     {t:'⚠️ Tarea vencida',b:'"{name}" de {teacher} ya venció. ¡Habla con tu profe ahora!'},
@@ -661,11 +658,9 @@ function scheduleNotifications(){
     else if(diff<=7)pool=NOTIF_MSGS.week;
     if(pool){
       const msg=pickMsg(pool,task);
-      // Guardar en localStorage para que el SW las dispare
       const key=`notif_${task.id}_${diff}`;
       if(!localStorage.getItem(key)){
         localStorage.setItem(key,'1');
-        // Mostrar notificación via SW si está disponible, sino directa
         if('serviceWorker' in navigator&&navigator.serviceWorker.controller){
           navigator.serviceWorker.controller.postMessage({
             type:'NOTIFY',
@@ -693,9 +688,7 @@ async function initNotifications(){
   const granted=await requestNotifPermission();
   if(granted){
     scheduleNotifications();
-    // Revisar cada hora
     setInterval(scheduleNotifications,60*60*1000);
-    // Limpiar keys viejas de tareas completadas
     tasks.filter(t=>t.done).forEach(t=>{
       ['overdue','today','tomorrow','days3','week',['-1','-2','-3']].forEach((_,i)=>{
         localStorage.removeItem(`notif_${t.id}_${i-1}`);
@@ -704,7 +697,6 @@ async function initNotifications(){
   }
 }
 
-// Botón de activar notificaciones
 function renderNotifBtn(){
   const btn=document.getElementById('notif-btn');
   if(!btn)return;
@@ -718,12 +710,10 @@ function renderNotifBtn(){
     btn.onclick=async()=>{await initNotifications();renderNotifBtn()};
   }
 }
-// ─────────────────────────────────────────────────────────────
 
 document.getElementById('f-title').addEventListener('keydown',e=>{if(e.key==='Enter')addTask()});
 if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js').catch(()=>{})}
 
-// PWA install
 let deferredPrompt=null;
 window.addEventListener('beforeinstallprompt',e=>{
   e.preventDefault();
@@ -744,10 +734,8 @@ document.getElementById('btn-install').addEventListener('click',()=>{
     }
     deferredPrompt=null;
   });
-
 });
 
-// Mostrar mensaje de gracias si no instala en 10s
 window._thanksTimer=setTimeout(()=>{
   document.getElementById('thanks-msg').classList.add('show');
 },10000);
